@@ -15,6 +15,7 @@
 #include <list>
 #include <mutex>  // NOLINT
 #include <vector>
+#include <unordered_map>
 
 #include "buffer/replacer.h"
 #include "common/config.h"
@@ -46,6 +47,11 @@ class LRUReplacer : public Replacer {
   size_t Size() override;
 
  private:
+  std::mutex latch;//线程锁
+  size_t max_num_pages;//LRU最大容量
+  std::list<frame_id_t> LRUlist;//用于判断替换顺序的链表
+  std::unordered_map<frame_id_t, std::list<frame_id_t>::iterator> LRUmap;//用于快速查找
+
   // TODO(student): implement me!
 };
 
