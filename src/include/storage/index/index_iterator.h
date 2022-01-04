@@ -24,6 +24,16 @@ class IndexIterator {
  public:
   // you may define your own constructor based on your member variables
   IndexIterator();
+  IndexIterator(B_PLUS_TREE_LEAF_PAGE_TYPE *leaf_page,int index,int max_size,BufferPoolManager *buffer_pool_manager_);
+//   IndexIterator(IndexIterator &old);
+  // IndexIterator &operator=(const IndexIterator &other) {
+  //   index=other.index;
+  //   max_size=other.max_size;
+  //   buffer_pool_manager_=other.buffer_pool_manager_;
+  //   leaf_page=reinterpret_cast<B_PLUS_TREE_LEAF_PAGE_TYPE *>((buffer_pool_manager_->FetchPage(other.leaf_page->GetParentPageId()))->GetData());
+  //   return *this;
+  // }
+
   ~IndexIterator();
 
   bool isEnd();
@@ -32,11 +42,23 @@ class IndexIterator {
 
   IndexIterator &operator++();
 
-  bool operator==(const IndexIterator &itr) const { throw std::runtime_error("unimplemented"); }
+  bool operator==(const IndexIterator &itr) const { 
+      if(leaf_page==itr.leaf_page && index==itr.index)
+          return true; 
+      return false;
+  }
 
-  bool operator!=(const IndexIterator &itr) const { throw std::runtime_error("unimplemented"); }
+  bool operator!=(const IndexIterator &itr) const { 
+       if(leaf_page!=itr.leaf_page || index!=itr.index)
+          return true; 
+      return false;
+  }
 
  private:
+    BufferPoolManager *buffer_pool_manager_;
+    B_PLUS_TREE_LEAF_PAGE_TYPE *leaf_page; 
+    int index;
+    int max_size;
   // add your own private member variables here
 };
 

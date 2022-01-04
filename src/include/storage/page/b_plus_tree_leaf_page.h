@@ -36,7 +36,7 @@ namespace bustub {
  * | PageType (4) | LSN (4) | CurrentSize (4) | MaxSize (4) |
  *  ---------------------------------------------------------------------
  *  -----------------------------------------------
- * | ParentPageId (4) | PageId (4) | NextPageId (4)
+ * | ParentPageId (4) | PageId (4) | NextPageId (4) 
  *  -----------------------------------------------
  */
 INDEX_TEMPLATE_ARGUMENTS
@@ -68,6 +68,7 @@ class BPlusTreeLeafPage : public BPlusTreePage {
   void CopyLastFrom(const MappingType &item);
   void CopyFirstFrom(const MappingType &item);
   page_id_t next_page_id_;
+
   MappingType array[0];
 };
 }  // namespace bustub

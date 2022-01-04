@@ -45,6 +45,8 @@ class BPlusTree {
   // Returns true if this B+ tree has no keys and values.
   bool IsEmpty() const;
 
+  bool IsSafe(ActionType action_type,BPlusTreePage *node) const;
+
   // Insert a key-value pair into this B+ tree.
   bool Insert(const KeyType &key, const ValueType &value, Transaction *transaction = nullptr);
 
@@ -77,7 +79,7 @@ class BPlusTree {
   // read data from file and remove one by one
   void RemoveFromFile(const std::string &file_name, Transaction *transaction = nullptr);
   // expose for test purpose
-  Page *FindLeafPage(const KeyType &key, bool leftMost = false);
+  Page *FindLeafPage(const KeyType &key, bool leftMost = false, Transaction *transaction=nullptr,ActionType action_type=ActionType::SEARCH);
 
  private:
   void StartNewTree(const KeyType &key, const ValueType &value);
@@ -104,6 +106,10 @@ class BPlusTree {
 
   void UpdateRootPageId(int insert_record = 0);
 
+  void Lock(ActionType action_type,Page *page,Transaction *transaction);
+
+  void Unlock(ActionType action_type,Transaction *transaction);
+
   /* Debug Routines for FREE!! */
   void ToGraph(BPlusTreePage *page, BufferPoolManager *bpm, std::ofstream &out) const;
 
@@ -116,6 +122,8 @@ class BPlusTree {
   KeyComparator comparator_;
   int leaf_max_size_;
   int internal_max_size_;
+
+  Page virtual_root_page;
 };
 
 }  // namespace bustub
